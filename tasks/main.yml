@@ -1,0 +1,13 @@
+---
+# This playbook will install EFF's Certbot for deploying Let's Encrypt certificates
+
+- name: Add Certbot PPA repository
+  apt_repository:
+    repo: ppa:certbot/certbot
+
+- name: Ensure Certbot is installed
+  package: name=python-certbot-nginx state=present
+
+- name: Ensure Certbot automatic renewal systemd timer is started and enabled to start at boot
+  service: name=certbot.timer state=started enabled=yes
+  when: ansible_service_mgr == 'systemd'
